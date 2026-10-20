@@ -41,11 +41,16 @@ public sealed class Program
                 .AddAspNetCoreInstrumentation(options =>
                 {
                     options.RecordException = true;
-                    options.Filter = context => !context.Request.Path.StartsWithSegments("/health");
+                    options.Filter = context => !context.Request.Path.StartsWithSegments("/healthz");
                 })
                 .AddHttpClientInstrumentation(options => options.RecordException = true)
                 .AddSignalRInstrumentation()
-                .AddSource("Microsoft.Orleans.*")
+                .AddSource(
+                    "Microsoft.Orleans.Application",
+                    "Microsoft.Orleans.Runtime",
+                    "Microsoft.Orleans.Lifecycle",
+                    "Microsoft.Orleans.Storage",
+                    "Microsoft.Orleans.DurableJobs")
                 .AddOtlpExporter())
             .WithMetrics(metrics => metrics
                 .SetResourceBuilder(resourceBuilder)
@@ -67,6 +72,8 @@ public sealed class Program
 
         builder.Host.UseOrleansClient(client =>
         {
+            client.AddActivityPropagation();
+
             client.UseConsulClientClustering(options =>
             {
                 options.ConfigureConsulClient(

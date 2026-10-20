@@ -1,5 +1,3 @@
-using Orleans.Dashboard;
-
 namespace Sheffield.Server.WebApi;
 
 using AspNetCore.SignalR.OpenTelemetry;
@@ -8,6 +6,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Orleans.Configuration;
+using Orleans.Dashboard;
 
 public sealed class Program
 {
@@ -43,11 +42,16 @@ public sealed class Program
                 .AddAspNetCoreInstrumentation(options =>
                 {
                     options.RecordException = true;
-                    options.Filter = context => !context.Request.Path.StartsWithSegments("/health");
+                    options.Filter = context => !context.Request.Path.StartsWithSegments("/healthz");
                 })
                 .AddHttpClientInstrumentation(options => options.RecordException = true)
                 .AddSignalRInstrumentation()
-                .AddSource("Microsoft.Orleans.*")
+                .AddSource(
+                    "Microsoft.Orleans.Application",
+                    "Microsoft.Orleans.Runtime",
+                    "Microsoft.Orleans.Lifecycle",
+                    "Microsoft.Orleans.Storage",
+                    "Microsoft.Orleans.DurableJobs")
                 .AddOtlpExporter())
             .WithMetrics(metrics => metrics
                 .SetResourceBuilder(resourceBuilder)
@@ -69,6 +73,8 @@ public sealed class Program
 
         builder.Host.UseOrleans(siloBuilder =>
         {
+            siloBuilder.AddActivityPropagation();
+
             siloBuilder.UseConsulSiloClustering(options =>
             {
                 options.ConfigureConsulClient(
@@ -81,7 +87,10 @@ public sealed class Program
                 options.ClusterId = builder.Configuration["Orleans:ClusterId"]!;
                 options.ServiceId = builder.Configuration["Orleans:ServiceId"]!;
             });
-            
+
+            siloBuilder.UseInMemoryReminderService();
+            siloBuilder.AddMemoryGrainStorageAsDefault();
+
             siloBuilder.AddDashboard();
         });
 
