@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/Client/" />
+  <Folder Name="/Client/src/" />
+  <Folder Name="/Client/src/WebApi/">
+    <Project Path="Client/src/WebApi/Sheffield.Client.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/Server/" />
+  <Folder Name="/Server/src/" />
+  <Folder Name="/Server/src/WebApi/">
+    <Project Path="Server/src/WebApi/Sheffield.Server.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/Shared/" />
+  <Folder Name="/Shared/src/" />
+  <Folder Name="/Shared/src/Grains/">
+    <Project Path="Shared/src/Grains/Sheffield.Shared.Grains.csproj" />
+  </Folder>
+  <Folder Name="/Shared/src/Services/">
+    <Project Path="Shared/src/Services/Sheffield.Shared.Services.csproj" />
+  </Folder>
+</Solution>

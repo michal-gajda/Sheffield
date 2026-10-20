@@ -1,0 +1,16 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5092",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+          "OTEL_SERVICE_NAME": "orlean-server",
+          "OTEL_RESOURCE_ATTRIBUTES": "service.namespace=sheffield,service.instance.id=orlean-server-01,service.version=1.0.0,deployment.environment=development"
+      }
+    }
+  }
+}
