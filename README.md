@@ -40,3 +40,10 @@ dotnet add Server/src/WebApi package Microsoft.Orleans.Dashboard
 consul acl policy create -name "read-write-policy" -rules @rw-policy.hcl
 consul acl token create -description "Orleans" -policy-name "read-write-policy"
 ```
+
+```powershell
+dotnet new webapi  --framework net10.0 --no-https --output Functions/src/WebApi --name Sheffield.Functions.WebApi
+dotnet add Functions/src/WebApi package Microsoft.Azure.Functions.Worker
+dotnet add Functions/src/WebApi package Microsoft.Azure.Functions.Worker.Extensions.Http
+dotnet add Functions/src/WebApi package Microsoft.Azure.Functions.Worker.Sdk
+```

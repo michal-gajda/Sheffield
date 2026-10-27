@@ -1,0 +1,6 @@
+@Sheffield.Functions.WebApi_HostAddress = http://localhost:5224
+
+GET {{Sheffield.Functions.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
